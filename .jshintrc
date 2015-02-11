@@ -30,6 +30,9 @@
 		"CharacterAlignment" : true,
 		"Justification": true,
 		"ColorSpace": true,
+		"ResizeMethods": true,
+		"CoordinateSpaces": true,
+		"AnchorPoint": true,
 		"alert": true,
 		"escape":true
 	}
