@@ -55,15 +55,14 @@ function exportOverlays(doc, path) {
         width: bounds[3] - bounds[1],
         height: bounds[2] - bounds[0]
       };
-      // $.writeln('photoLayer.rectangles i  : ', photoLayer.rectangles[i].images[0]);
-      // $.writeln('photoLayer.rectangles i  : ', photoLayer.rectangles[i].images[0].label);
-      // $.writeln('photoLayer.rectangles i  : ', photoLayer.rectangles[i].images[0].name);
+
       // $.writeln('photoLayer.rectangles i  : ', photoLayer.rectangles[i].images[0].itemLink.filePath);
       rObj.name = 'overlay-'+i;
 
       var file = new File(photoLayer.rectangles[i].images[0].itemLink.filePath);
+      var ext = file.displayName.split('.').pop();
       if(file.exists) {
-        file.copy(path+i+'.png');
+        file.copy(path+i+'.'+ext);
       }
       //$.writeln('photoLayer file.exists  : ', file.exists);
 
