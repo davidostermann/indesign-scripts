@@ -1,6 +1,6 @@
 #include "libs/json2.js" // jshint ignore:line
-#include "libs/lodash.js" // jshint ignore:line
-#include "libs/async.js" // jshint ignore:line
+// #include "libs/lodash.js" // jshint ignore:line
+// #include "libs/async.js" // jshint ignore:line
 
 main();
 
@@ -29,7 +29,9 @@ function main() {
           //prefs
           infos.prefs = exportAppPrefs();
           // text
-          infos.texts = exportTexts(doc, fileFolder+'/text');
+          infos.texts = exportTexts(doc);
+          // overlay
+          infos.overlay = exportOverlays(doc, fileFolder+'/overlay-placeholder');
 
           writeJsonFile(fileFolder.fullName+'/data.json', JSON.stringify(infos));
 
@@ -37,7 +39,48 @@ function main() {
     }
 }
 
-function exportTexts(doc, fullName) {
+function exportOverlays(doc, path) {
+  var arr = [];
+  doc.layers.everyItem().visible = false;
+  var photoLayer =  doc.layers.itemByName('_photos');
+  if(photoLayer.isValid) {
+    photoLayer.visible = true;
+    var rObj, bounds;
+    for (var i = 0; i < photoLayer.rectangles.length; i++) {
+      rObj = {};
+      bounds = photoLayer.rectangles[i].geometricBounds;
+      rObj.bounds = {
+        x: bounds[1], 
+        y: bounds[0], 
+        width: bounds[3] - bounds[1],
+        height: bounds[2] - bounds[0]
+      };
+      // $.writeln('photoLayer.rectangles i  : ', photoLayer.rectangles[i].images[0]);
+      // $.writeln('photoLayer.rectangles i  : ', photoLayer.rectangles[i].images[0].label);
+      // $.writeln('photoLayer.rectangles i  : ', photoLayer.rectangles[i].images[0].name);
+      // $.writeln('photoLayer.rectangles i  : ', photoLayer.rectangles[i].images[0].itemLink.filePath);
+      rObj.name = 'overlay-'+i;
+
+      var file = new File(photoLayer.rectangles[i].images[0].itemLink.filePath);
+      if(file.exists) {
+        file.copy(path+i+'.png');
+      }
+      //$.writeln('photoLayer file.exists  : ', file.exists);
+
+      //var pWeb = photoLayer.rectangles[i].images[0].exportForWeb(new File(path+i+'.jpg'));
+      //photoLayer.rectangles[i].images[0].exportFile(ExportFormat.PNG_FORMAT , new File(path+i+'.png'), true);
+      //$.writeln('photoLayer.rectangles pWeb  : ', pWeb);
+
+      arr.push(rObj);
+    }
+
+  } else {
+    return false;
+  }
+  return arr;
+}
+
+function exportTexts(doc) {
   var arr = [];
   doc.layers.everyItem().visible = false;
   var textLayer =  doc.layers.itemByName('_textes');
@@ -66,13 +109,17 @@ function exportTexts(doc, fullName) {
       // $.writeln('txtFrame pointSize: ', txtFrame.texts[0].pointSize);
       // $.writeln('txtFrame characterAlignment: ', txtFrame.texts[0].characterAlignment);
       //$.writeln('txtFrame characterAlignment: ', txtFrame.texts[0].justification);
+      // $.writeln('1P txtFrame fillColor: ', txtFrame.texts[0].fillColor.colorValue);
+      var color = txtFrame.texts[0].fillColor;
+      color.space = ColorSpace.RGB;
+      var hex = rgbToHex.apply(this, color.colorValue);
       rObj.fontFamily = txtFrame.texts[0].appliedFont.fontFamily;
       rObj.fontStyleName = txtFrame.texts[0].appliedFont.fontStyleName;
       rObj.pointSize = txtFrame.texts[0].pointSize;
       rObj.verticalAlign = exportAlign(txtFrame.texts[0].characterAlignment);
       rObj.horizontalAlign = exportJustification(txtFrame.texts[0].justification);
+      rObj.color = hex;
       arr.push(rObj);
-      //txtFrame.exportFile(ExportFormat.TEXT_TYPE, new File(fullName+i), true);
     }
   } else {
     return false;
@@ -134,4 +181,8 @@ function writeJsonFile(fullName, dataStr) {
   write_file.lineFeed = "Unix"; //convert to UNIX lineFeed
   write_file.writeln(dataStr);
   write_file.close();
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
 }
