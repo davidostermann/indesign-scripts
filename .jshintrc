@@ -30,6 +30,7 @@
 		"CharacterAlignment" : true,
 		"Justification": true,
 		"ColorSpace": true,
+		"alert": true,
 		"escape":true
 	}
 }

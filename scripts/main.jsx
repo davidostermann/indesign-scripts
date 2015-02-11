@@ -22,16 +22,23 @@ function main() {
           // doc
           doc = app.open(file, true);
 
+          // ratio to fit exactly in 920x475
+          var ratio = exportRatio(doc, 920, 475);
+
+          exportOriginal(doc, ratio, fileFolder+'/original.png');
+
           // bg
           exportBackground(doc, fileFolder+'/bg.png');
 
           var infos = {};
           //prefs
           infos.prefs = exportAppPrefs();
+          infos.prefs.ratio = ratio;
+
           // text
-          infos.texts = exportTexts(doc);
+          infos.texts = exportTexts(doc, ratio);
           // overlay
-          infos.overlay = exportOverlays(doc, fileFolder+'/overlay-placeholder');
+          infos.overlay = exportOverlays(doc, ratio, fileFolder+'/overlay-placeholder');
 
           writeJsonFile(fileFolder.fullName+'/data.json', JSON.stringify(infos));
 
@@ -39,7 +46,7 @@ function main() {
     }
 }
 
-function exportOverlays(doc, path) {
+function exportOverlays(doc, ratio, path) {
   var arr = [];
   doc.layers.everyItem().visible = false;
   var photoLayer =  doc.layers.itemByName('_photos');
@@ -50,10 +57,10 @@ function exportOverlays(doc, path) {
       rObj = {};
       bounds = photoLayer.rectangles[i].geometricBounds;
       rObj.bounds = {
-        x: bounds[1], 
-        y: bounds[0], 
-        width: bounds[3] - bounds[1],
-        height: bounds[2] - bounds[0]
+        x: bounds[1] *ratio, 
+        y: bounds[0] *ratio, 
+        width: (bounds[3] - bounds[1]) *ratio,
+        height: (bounds[2] - bounds[0]) *ratio
       };
 
       // $.writeln('photoLayer.rectangles i  : ', photoLayer.rectangles[i].images[0].itemLink.filePath);
@@ -79,7 +86,7 @@ function exportOverlays(doc, path) {
   return arr;
 }
 
-function exportTexts(doc) {
+function exportTexts(doc, ratio) {
   var arr = [];
   doc.layers.everyItem().visible = false;
   var textLayer =  doc.layers.itemByName('_textes');
@@ -94,10 +101,10 @@ function exportTexts(doc) {
       rObj.text =  escape(txtFrame.contents);
       bounds = txtFrame.geometricBounds;
       rObj.bounds = {
-        x: bounds[1], 
-        y: bounds[0], 
-        width: bounds[3] - bounds[1],
-        height: bounds[2] - bounds[0]
+        x: bounds[1] *ratio, 
+        y: bounds[0] *ratio, 
+        width: (bounds[3] - bounds[1]) *ratio,
+        height: (bounds[2] - bounds[0]) *ratio
       };
       // $.writeln('txtFrame fontStyle: ', txtFrame.textStyleRanges[0].fontStyle);
       // $.writeln('txtFrame appliedFont.fontFamily: ', txtFrame.texts[0].appliedFont.fontFamily);
@@ -114,7 +121,7 @@ function exportTexts(doc) {
       var hex = rgbToHex.apply(this, color.colorValue);
       rObj.fontFamily = txtFrame.texts[0].appliedFont.fontFamily;
       rObj.fontStyleName = txtFrame.texts[0].appliedFont.fontStyleName;
-      rObj.pointSize = txtFrame.texts[0].pointSize;
+      rObj.pointSize = txtFrame.texts[0].pointSize *ratio;
       rObj.verticalAlign = exportAlign(txtFrame.texts[0].characterAlignment);
       rObj.horizontalAlign = exportJustification(txtFrame.texts[0].justification);
       rObj.color = hex;
@@ -149,6 +156,13 @@ function exportJustification(justif) {
 // Justification.AWAY_FROM_BINDING_SIDE
 }
 
+function exportOriginal(doc, ratio, fullName) {
+  doc.layers.everyItem().visible = true;
+  if (!doc.saved) { doc.save(); }
+  alert('Preciser la resolution suivante [ '+ Math.round(ratio*72) +' ] dans la fenêtre d\'option d\'export');
+  doc.exportFile(ExportFormat.PNG_FORMAT , new File(fullName), true);
+}
+
 function exportBackground(doc, fullName) {
   // prefs d'export en 'read only'. Il faut faire un premiere export pour setter les paramètres désirés
   doc.layers.everyItem().visible = false;
@@ -160,6 +174,15 @@ function exportBackground(doc, fullName) {
   } else {
     return false;
   }
+}
+
+function exportRatio(doc, destW, destH) {
+  var origW = doc.pages[0].bounds[3];
+  var origH = doc.pages[0].bounds[2];
+  var destRatio = destW / destH;
+  var origRatio = origW / origH;
+  var scaleRatio = (origRatio < destRatio) ? ( destH / origH ) : ( destW / origW ) ;
+  return scaleRatio;
 }
 
 function exportAppPrefs() {
