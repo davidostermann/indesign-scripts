@@ -3,3 +3,8 @@
 .AppleDouble
 .LSOverride
 Icon
+
+### INDESIGN ###
+*.idlk
+
+*.zip
