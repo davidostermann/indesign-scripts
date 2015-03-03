@@ -52,9 +52,14 @@ function exportOverlays(doc, ratio, path) {
   var photoLayer =  doc.layers.itemByName('_photos');
   if(photoLayer.isValid) {
     photoLayer.visible = true;
-    var rObj, bounds;
+    var rObj, bounds, element;
     for (var i = 0; i < photoLayer.rectangles.length; i++) {
-      rObj = {};
+      element = {
+        id: 'photo'+i,
+        original: {},
+        user:{}
+      };
+      rObj = element.original;
       bounds = photoLayer.rectangles[i].geometricBounds;
       rObj.bounds = {
         x: bounds[1] *ratio, 
@@ -64,7 +69,7 @@ function exportOverlays(doc, ratio, path) {
       };
 
       // $.writeln('photoLayer.rectangles i  : ', photoLayer.rectangles[i].images[0].itemLink.filePath);
-      rObj.name = 'overlay-'+i;
+      rObj.src = 'overlay-'+i;
 
       var file = new File(photoLayer.rectangles[i].images[0].itemLink.filePath);
       var ext = file.displayName.split('.').pop();
@@ -77,7 +82,7 @@ function exportOverlays(doc, ratio, path) {
       //photoLayer.rectangles[i].images[0].exportFile(ExportFormat.PNG_FORMAT , new File(path+i+'.png'), true);
       //$.writeln('photoLayer.rectangles pWeb  : ', pWeb);
 
-      arr.push(rObj);
+      arr.push(element);
     }
 
   } else {
@@ -94,10 +99,16 @@ function exportTexts(doc, ratio) {
     textLayer.visible = true;
     $.writeln('textLayer.textFrames.length : ', textLayer.textFrames.length);
     
-    var txtFrame, rObj, bounds;
+    var txtFrame, rObj, bounds, element;
     for (var i = 0; i < textLayer.textFrames.length; i++) {
       txtFrame = textLayer.textFrames[i];
-      rObj = {};
+      element = {
+        id: 'txt'+i,
+        original: {},
+        user:{}
+      };
+
+      rObj = element.original;
       rObj.text =  escape(txtFrame.contents);
       bounds = txtFrame.geometricBounds;
       rObj.bounds = {
@@ -125,7 +136,7 @@ function exportTexts(doc, ratio) {
       rObj.verticalAlign = exportAlign(txtFrame.texts[0].characterAlignment);
       rObj.horizontalAlign = exportJustification(txtFrame.texts[0].justification);
       rObj.color = hex;
-      arr.push(rObj);
+      arr.push(element);
     }
   } else {
     return false;
@@ -182,7 +193,7 @@ function exportRatio(doc, destW, destH) {
   var destRatio = destW / destH;
   var origRatio = origW / origH;
   var scaleRatio = (origRatio < destRatio) ? ( destH / origH ) : ( destW / origW ) ;
-  return scaleRatio;
+  return 1;
 }
 
 function exportAppPrefs() {
