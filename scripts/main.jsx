@@ -38,7 +38,7 @@ function main() {
           // text
           infos.texts = exportTexts(doc, ratio);
           // overlay
-          infos.overlay = exportOverlays(doc, ratio, fileFolder+'/overlay-placeholder');
+          infos.overlay = exportOverlays(doc, ratio, fileFolder);
 
           writeJsonFile(fileFolder.fullName+'/data.json', JSON.stringify(infos));
 
@@ -50,9 +50,11 @@ function exportOverlays(doc, ratio, path) {
   var arr = [];
   doc.layers.everyItem().visible = false;
   var photoLayer =  doc.layers.itemByName('_photos');
+
+  
   if(photoLayer.isValid) {
     photoLayer.visible = true;
-    var rObj, bounds, element;
+    var rObj, bounds, element, imageBounds;
     for (var i = 0; i < photoLayer.rectangles.length; i++) {
       element = {
         id: 'photo'+i,
@@ -60,22 +62,42 @@ function exportOverlays(doc, ratio, path) {
         user:{}
       };
       rObj = element.original;
+
       bounds = photoLayer.rectangles[i].geometricBounds;
+      
       rObj.bounds = {
         x: bounds[1] *ratio, 
         y: bounds[0] *ratio, 
         width: (bounds[3] - bounds[1]) *ratio,
         height: (bounds[2] - bounds[0]) *ratio
       };
+      rObj.imageBounds = undefined;
+      rObj.verticalScale = undefined;
+      rObj.horizontalScale = undefined;
+      rObj.src = undefined;
 
-      // $.writeln('photoLayer.rectangles i  : ', photoLayer.rectangles[i].images[0].itemLink.filePath);
-      rObj.src = 'overlay-'+i;
+      var image = photoLayer.rectangles[i].images[0];
+      if(image !== undefined) {
+        imageBounds = image.geometricBounds;
+        rObj.imageBounds = {
+          x: imageBounds[1] *ratio, 
+          y: imageBounds[0] *ratio, 
+          width: (imageBounds[3] - imageBounds[1]) *ratio,
+          height: (imageBounds[2] - imageBounds[0]) *ratio
+        };
 
-      var file = new File(photoLayer.rectangles[i].images[0].itemLink.filePath);
-      var ext = file.displayName.split('.').pop();
-      if(file.exists) {
-        file.copy(path+i+'.'+ext);
+        rObj.verticalScale = image.verticalScale;
+        rObj.horizontalScale = image.horizontalScale;
+
+        var file = new File(image.itemLink.filePath);
+        var ext = file.displayName.split('.').pop();
+        var filePath = path+'/overlay-'+i+'.'+ext;
+        if(file.exists) {
+          file.copy(filePath);
+          rObj.src = filePath;
+        }
       }
+      
       //$.writeln('photoLayer file.exists  : ', file.exists);
 
       //var pWeb = photoLayer.rectangles[i].images[0].exportForWeb(new File(path+i+'.jpg'));
@@ -97,7 +119,7 @@ function exportTexts(doc, ratio) {
   var textLayer =  doc.layers.itemByName('_textes');
   if(textLayer.isValid) {
     textLayer.visible = true;
-    $.writeln('textLayer.textFrames.length : ', textLayer.textFrames.length);
+    //$.writeln('textLayer.textFrames.length : ', textLayer.textFrames.length);
     
     var txtFrame, rObj, bounds, element;
     for (var i = 0; i < textLayer.textFrames.length; i++) {
