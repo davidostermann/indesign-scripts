@@ -91,10 +91,10 @@ function exportOverlays(doc, ratio, path) {
 
         var file = new File(image.itemLink.filePath);
         var ext = file.displayName.split('.').pop();
-        var filePath = path+'/overlay-'+i+'.'+ext;
+        var fileName = 'overlay-'+i+'.'+ext;
         if(file.exists) {
-          file.copy(filePath);
-          rObj.src = filePath;
+          file.copy(path);
+          rObj.src = fileName;
         }
       }
       
