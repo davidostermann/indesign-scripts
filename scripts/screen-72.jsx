@@ -1,0 +1,1 @@
+﻿    app.generalPreferences.customMonitorPpi = 72;app.generalPreferences.useCustomMonitorResolution = true; app.viewPreferences.horizontalMeasurementUnits = MeasurementUnits.PIXELS;app.viewPreferences.verticalMeasurementUnits = MeasurementUnits.PIXELS;// ca ne marche que pour les nouveau document
