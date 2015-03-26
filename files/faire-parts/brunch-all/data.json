@@ -1,6 +1,6 @@
-{"prefs":{"xUnitsIsPixel":false,"yUnitsIsPixel":false,"ratio":"1.5"},"texts":[{"id":"txt0","original":{"text":"Victor","bounds":{"x":60.6087992125984,"y":147.417917481937,"width":323.60811023622,"height":45.17529482238},"fontFamily":"Oleo Script","fontStyleName":"Bold","pointSize":43.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#f39ea6"},"user":{
+{"prefs":{"xUnitsIsPixel":true,"yUnitsIsPixel":true,"ratio":"1.5"},"texts":[{"id":"txt0","original":{"text":"Victor","bounds":{"x":60.6087992125984,"y":147.417917481937,"width":323.60811023622,"height":58.2866337488257},"fontFamily":"Oleo Script","fontStyleName":"Bold","pointSize":43.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#f39ea6"},"user":{
 
-}},{"id":"txt1","original":{"text":"Mathilde","bounds":{"x":61.6717913385826,"y":73.7281074350145,"width":323.60811023622,"height":45.17529482238},"fontFamily":"Oleo Script","fontStyleName":"Bold","pointSize":43.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#f39ea6"},"user":{
+}},{"id":"txt1","original":{"text":"Mathilde","bounds":{"x":61.6717913385826,"y":73.7281074350145,"width":323.60811023622,"height":58.2866337488257},"fontFamily":"Oleo Script","fontStyleName":"Bold","pointSize":43.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#f39ea6"},"user":{
 
 }},{"id":"txt2","original":{"text":"R%E9ponse%20souhait%E9e%20avant%20le%201er%20Juin","bounds":{"x":105.040728997028,"y":565.686769054742,"width":225,"height":21.3447270082504},"fontFamily":"Karma","fontStyleName":"Regular","pointSize":13.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#f39ea6"},"user":{
 
@@ -13,5 +13,7 @@
 }},{"id":"txt6","original":{"text":"du%20mariage%20au%20%0D","bounds":{"x":105.040728997028,"y":428.220046192519,"width":225,"height":26.7364962152408},"fontFamily":"Gentium Book Basic","fontStyleName":"Regular","pointSize":21,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#7b7b7a"},"user":{
 
 }},{"id":"txt7","original":{"text":"53%2C%20Rue%20de%20la%20Bellevilloise%2075019%20Paris","bounds":{"x":58.5490438758383,"y":610.561395191197,"width":316.602699649898,"height":17.1259842519685},"fontFamily":"Karma","fontStyleName":"Bold","pointSize":13.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#f39ea6"},"user":{
+
+}},{"id":"txt8","original":{"text":"ont%20le%20plaisir%20de%20vous%0Dinviter%20%E0%20prolonger%20la%20f%EAte%20le","bounds":{"x":61.6717913385826,"y":213.001601494947,"width":325.734094488189,"height":58.2866337488256},"fontFamily":"Gentium Book Basic","fontStyleName":"Regular","pointSize":19.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#7b7b7a"},"user":{
 
 }}],"overlay":false}

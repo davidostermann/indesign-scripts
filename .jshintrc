@@ -34,6 +34,7 @@
 		"CoordinateSpaces": true,
 		"AnchorPoint": true,
 		"alert": true,
-		"escape":true
+		"escape": true,
+		"prompt": true
 	}
 }
