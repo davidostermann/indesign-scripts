@@ -1,6 +1,6 @@
-{"prefs":{"xUnitsIsPixel":true,"yUnitsIsPixel":true,"ratio":"1.5"},"texts":[{"id":"txt0","original":{"text":"Victor","bounds":{"x":60.6087992125984,"y":147.417917481937,"width":323.60811023622,"height":58.2866337488257},"fontFamily":"Oleo Script","fontStyleName":"Bold","pointSize":43.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#f39ea6"},"user":{
+{"prefs":{"xUnitsIsPixel":false,"yUnitsIsPixel":false,"ratio":"1.5"},"texts":[{"id":"txt0","original":{"text":"Victor","bounds":{"x":60.6087992125984,"y":147.417917481937,"width":323.60811023622,"height":58.2866337488257},"fontFamily":"Oleo Script","fontStyleName":"Bold","pointSize":43.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#f39ea6"},"user":{
 
-}},{"id":"txt1","original":{"text":"Mathilde","bounds":{"x":61.6717913385826,"y":73.7281074350145,"width":323.60811023622,"height":58.2866337488257},"fontFamily":"Oleo Script","fontStyleName":"Bold","pointSize":43.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#f39ea6"},"user":{
+}},{"id":"txt1","original":{"text":"P%E9n%E9lope","bounds":{"x":61.6717913385826,"y":73.7281074350145,"width":323.60811023622,"height":58.2866337488257},"fontFamily":"Oleo Script","fontStyleName":"Bold","pointSize":43.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#f39ea6"},"user":{
 
 }},{"id":"txt2","original":{"text":"R%E9ponse%20souhait%E9e%20avant%20le%201er%20Juin","bounds":{"x":105.040728997028,"y":565.686769054742,"width":225,"height":21.3447270082504},"fontFamily":"Karma","fontStyleName":"Regular","pointSize":13.5,"verticalAlign":"ALIGN_EM_CENTER","horizontalAlign":"CENTER_ALIGN","color":"#f39ea6"},"user":{
 
