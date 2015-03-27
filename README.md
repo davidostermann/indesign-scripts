@@ -85,7 +85,7 @@ Les contraintes suivantes doivent être suivi pour chaque bloc texte :
 ![image](images/image.jpg)
 
 ## Exemple de fichiers 
-###Fichiers indesign *aux normes* téléchargeable à cette adresse : [exemple](exemple.zip)
+###Fichiers indesign *aux normes* téléchargeable à cette adresse : [exemple](http://demo.zeeagency.com/2015/032015/artdupapier/exemple-indesing.zip)
 	
 	
 
