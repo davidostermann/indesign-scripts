@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Indesign-scripts by davidostermann</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Indesign-scripts</h1>
+          <h2>extendscript pour indesign</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/davidostermann/indesign-scripts/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/davidostermann/indesign-scripts/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/davidostermann/indesign-scripts" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a id="spécification-pour-les-designers" class="anchor" href="#sp%C3%A9cification-pour-les-designers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Spécification pour les designers</h1>
+
+<h2>
+<a id="préambule" class="anchor" href="#pr%C3%A9ambule" aria-hidden="true"><span class="octicon octicon-link"></span></a>Préambule</h2>
+
+<p>Le but de ce document est d'expliquer aux designers comment exporter les données d'un document indesign nécessaire à l'application web Art Du Papier.</p>
+
+<h2>
+<a id="prérequis-sur-les-préférences-indesign" class="anchor" href="#pr%C3%A9requis-sur-les-pr%C3%A9f%C3%A9rences-indesign" aria-hidden="true"><span class="octicon octicon-link"></span></a>Prérequis sur les préférences Indesign</h2>
+
+<p>Afin que les données expotées soient cohérentes pour le web, <em>les unités de la règle</em> doivent être en pixel.</p>
+
+<p><img src="images/preferences.jpg" alt="preferences"></p>
+
+<p>Un autre point à noter est qu'Indesign affiche par defaut les documents par rapport à la résolution de l'écran ; ce qui à pour conséquence de montrer le document plus grand qu'il n'est réellement (c'est à dire 72 dpi).</p>
+
+<p>Nous vous fournissons 2 scripts spécifiques à cette adresse : <a href="http://demo.zeeagency.com/2015/032015/artdupapier/scripts-indesign-web.zip">télécharger ici</a></p>
+
+<ul>
+<li>un qui permet d'adapter les préférences au web (résolution à 72 ppi et unités de règle en millimètre)</li>
+<li>un qui permet de reinitialiser les préférences (résolution par défaut et unités de règle en millimètre)</li>
+</ul>
+
+<p>Un troisième script sera fourni qui concerne l'export en lui même.</p>
+
+<h3>
+<a id="pour-installer-et-utiliser-les-scripts-" class="anchor" href="#pour-installer-et-utiliser-les-scripts-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Pour installer et utiliser les scripts :</h3>
+
+<ul>
+<li>Mettre les fichiers ici : Macintosh HD &gt; Applications &gt; Adobe InDesign CC &gt; Scripts &gt; Scripts Panel</li>
+<li>Lancer InDesign, créer un nouveau document, et ouvrir le panneau de script (Window &gt; Utilities &gt; Scripts)</li>
+<li>Pour lancer un script, double-cliquer sur son nom dans le panneau de script </li>
+</ul>
+
+<p><img src="images/script_panel.jpg" alt="script panel"></p>
+
+<h2>
+<a id="le-format-des-documents" class="anchor" href="#le-format-des-documents" aria-hidden="true"><span class="octicon octicon-link"></span></a>Le format des documents</h2>
+
+<p>NB : Comme vu dans les prérequis, la taille du document doit être exprimé en pixel</p>
+
+<p>La seul contrainte est que le document doit avoir une <strong>largeur maximum de 920 pixels</strong> avec un ratio d'échelle d'export à 1 (ratio expliqué ci-dessous)</p>
+
+<p>NB : <strong>Ratio</strong> : le script permet de changer la taille du document à l'export en proposant de spécifier un ratio. Cela peut-être utile pour un document trop grand au trop petit.</p>
+
+<p><img src="images/ratio.png" alt="image"></p>
+
+<p>NB : Ici le ratio est 1,5. Par exemple, un document de 300px de large sera exporté avec une largeur 450px.</p>
+
+<h2>
+<a id="la-structure-à-appliquer-aux-documents" class="anchor" href="#la-structure-%C3%A0-appliquer-aux-documents" aria-hidden="true"><span class="octicon octicon-link"></span></a>La structure à appliquer aux documents</h2>
+
+<p>Le document doit comprendre 3 calques :</p>
+
+<ul>
+<li>pour tous les éléments non-customisable =&gt; nom : <strong>_fond</strong>
+</li>
+<li>pour tous les textes customisables =&gt; nom : <strong>_textes</strong>
+</li>
+<li>pour toutes les photos customisables =&gt; nom : <strong>_photos</strong>
+</li>
+</ul>
+
+<p><img src="images/layers.jpg" alt="image"></p>
+
+<p>NB : Tous les autres calques ne seront pas pris en compte.</p>
+
+<h2>
+<a id="les-éléments-non-customisable" class="anchor" href="#les-%C3%A9l%C3%A9ments-non-customisable" aria-hidden="true"><span class="octicon octicon-link"></span></a>Les éléments non-customisable</h2>
+
+<p>Aucune limitation. Le calque sera aplati et transformé en image. </p>
+
+<h2>
+<a id="les-textes-customisables" class="anchor" href="#les-textes-customisables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Les textes customisables</h2>
+
+<h4>
+<a id="les-paramètres-pris-en-compte-sont-encadrés-dans-limage-suivante-" class="anchor" href="#les-param%C3%A8tres-pris-en-compte-sont-encadr%C3%A9s-dans-limage-suivante-" aria-hidden="true"><span class="octicon octicon-link"></span></a>les paramètres pris en compte sont encadrés dans l'image suivante :</h4>
+
+<p><img src="images/text.jpg" alt="image">
+<img src="images/couleur.jpg" alt="image"></p>
+
+<h4>
+<a id="les-contraintes-liées-aux-textes-" class="anchor" href="#les-contraintes-li%C3%A9es-aux-textes-" aria-hidden="true"><span class="octicon octicon-link"></span></a>Les contraintes liées aux textes :</h4>
+
+<p>Les contraintes suivantes doivent être suivi pour chaque bloc texte :</p>
+
+<ul>
+<li>une typo par TextFrame</li>
+<li>une size par TextFrame</li>
+<li>une couleur par TextFrame</li>
+<li>un centrage horizontal par TextFrame</li>
+<li>la hauteur du TexFrame doit comporter un espace supplémentaire en dessous de la dernière ligne correspondant au 1/2 X la taille de la typo en partant de la ligne de base du texte de la dernière ligne (illustré dans l'image ci-dessous)</li>
+</ul>
+
+<p><img src="images/text_space.jpg" alt="image"></p>
+
+<ul>
+<li>Les typos doivent être des google font. 
+
+<ul>
+<li>La liste exhautive des polices de lettres autorisés est visible ici : et telechargeable en ttf <a href="https://github.com/google/fonts/tree/master/ofl">ici</a>, ici <a href="http://www.fonts.com/web-fonts/google">ici</a> et visible aussi <a href="http://www.google.com/fonts">ici</a>
+</li>
+</ul>
+</li>
+</ul>
+
+<h2>
+<a id="les-photos-customisables" class="anchor" href="#les-photos-customisables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Les photos customisables</h2>
+
+<h4>
+<a id="les-paramètres-pris-en-compte-sont-la-taille-et-la-position-du-container-et-de-limage" class="anchor" href="#les-param%C3%A8tres-pris-en-compte-sont-la-taille-et-la-position-du-container-et-de-limage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Les paramètres pris en compte sont la taille et la position du container et de l'image.</h4>
+
+<p><img src="images/image.jpg" alt="image"></p>
+
+<h2>
+<a id="exemple-de-fichiers" class="anchor" href="#exemple-de-fichiers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Exemple de fichiers</h2>
+
+<h3>
+<a id="fichiers-indesign-aux-normes-téléchargeable-à-cette-adresse--exemple" class="anchor" href="#fichiers-indesign-aux-normes-t%C3%A9l%C3%A9chargeable-%C3%A0-cette-adresse--exemple" aria-hidden="true"><span class="octicon octicon-link"></span></a>Fichiers indesign <em>aux normes</em> téléchargeable à cette adresse : <a href="http://demo.zeeagency.com/2015/032015/artdupapier/exemple-indesing.zip">exemple</a>
+</h3>
+        </section>
+
+        <footer>
+          Indesign-scripts is maintained by <a href="https://github.com/davidostermann">davidostermann</a><br>
+          This page was generated by <a href="https://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
