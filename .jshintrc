@@ -35,6 +35,7 @@
 		"AnchorPoint": true,
 		"alert": true,
 		"escape": true,
-		"prompt": true
+		"prompt": true,
+		"JSON": true
 	}
 }
