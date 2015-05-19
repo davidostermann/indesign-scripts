@@ -2,10 +2,26 @@
 // #include "libs/lodash.js" // jshint ignore:line
 // #include "libs/async.js" // jshint ignore:line
 
+Error.prototype.toString = function() {
+    if (typeof this.stack === "undefined" || this.stack === null) {
+        this.stack = "placeholder";
+        // The previous line is needed because the next line may indirectly call this method.
+        this.stack = $.stack;
+    }
+    return "Error";
+};
 
 var ratio = 1;
 
-main();
+try {
+  main();
+} catch (e) {
+
+  $.writeln("Line: " + e.line);
+  $.writeln("File: " + e.fileName);
+  $.writeln("Message: " + e.message);
+  $.writeln("Stack: " + e.stack);
+}
 
 function main() {
   // var filepath = "~/Desktop/test.json";
@@ -172,24 +188,39 @@ function exportTexts(doc, ratio) {
       // $.writeln('txtFrame characterAlignment: ', txtFrame.texts[0].characterAlignment);
       //$.writeln('txtFrame characterAlignment: ', txtFrame.texts[0].justification);
       // $.writeln('1P txtFrame fillColor: ', txtFrame.texts[0].fillColor.colorValue);
+      
       var color = txtFrame.texts[0].fillColor;
-
       var hex = '#000000';
-      if(color.space == ColorSpace.CMYK) {
-        hex = cmykToHex.apply(this, color.colorValue);
-      } else if(color.space == ColorSpace.RGB) {
-        hex = rgbToHex.apply(this, color.colorValue);
+      if(!color) {
+          alert("L'element dont le texte \""+rObj.text+"\" est n'a pas de couleur.");
       } else {
-        alert("Le colorspace n'est ni en RVB ni en CMYK, le texte sera noir.");
+           if(color.space == ColorSpace.CMYK) {
+            hex = cmykToHex.apply(this, color.colorValue);
+            $.writeln('ColorSpace.CMYK : '+ rObj.text+' = '+hex);
+          } else if(color.space == ColorSpace.RGB) {
+            hex = rgbToHex.apply(this, color.colorValue);
+            $.writeln('ColorSpace.RGB : '+ rObj.text+' = '+hex);
+          } else {
+            alert("Le colorspace n'est ni en RVB ni en CMYK, le texte sera noir.");
+          }
       }
-
+      
       rObj.fontFamily = txtFrame.texts[0].appliedFont.fontFamily;
-      rObj.fontStyleName = txtFrame.texts[0].appliedFont.fontStyleName;
+
+      try {
+        rObj.fontStyleName = txtFrame.texts[0].appliedFont.fontStyleName;
+      } catch(e) {
+        rObj.fontStyleName = "Regular";
+      }
+      
       rObj.pointSize = txtFrame.texts[0].pointSize * ratio;
       rObj.verticalAlign = exportAlign(txtFrame.texts[0].characterAlignment);
       rObj.horizontalAlign = exportJustification(txtFrame.texts[0].justification);
       rObj.color = hex;
       arr.push(element);
+    
+
+
     }
   } else {
     return false;
