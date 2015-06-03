@@ -174,10 +174,18 @@ function exportTexts(doc, ratio) {
       bounds = txtFrame.geometricBounds;
       rObj.bounds = {
         x: bounds[1] * ratio,
-        y: bounds[0] * ratio,
+        y: (bounds[0] * ratio),
         width: (bounds[3] - bounds[1]) * ratio,
         height: (bounds[2] - bounds[0]) * ratio
       };
+
+      // rObj.bounds = {
+      //   x: bounds[1] * ratio,
+      //   y: (bounds[0] * ratio) - (txtFrame.texts[0].ascent * ratio),
+      //   width: (bounds[3] - bounds[1]) * ratio,
+      //   height: (bounds[2] - bounds[0]) * ratio + (txtFrame.texts[0].ascent * ratio) + (txtFrame.texts[0].descent * ratio)
+      // };
+
       // $.writeln('txtFrame fontStyle: ', txtFrame.textStyleRanges[0].fontStyle);
       // $.writeln('txtFrame appliedFont.fontFamily: ', txtFrame.texts[0].appliedFont.fontFamily);
       // $.writeln('txtFrame appliedFont.fontStyleName: ', txtFrame.texts[0].appliedFont.fontStyleName);
