@@ -45,17 +45,21 @@ function main() {
 
     var filesArr = folder.getFiles('*.indd');
 
+    var firstDoc = true;
     for (var i = 0; i < filesArr.length; i++) {
-      exportDocument(filesArr[i]);
+      exportDocument(filesArr[i], firstDoc);
+      firstDoc = false;
     }
   }
 }
 
-function exportDocument(file) {
+function exportDocument(file, firstDoc) {
 
   var fileFolder, dataStr, doc;
   // prepare folder and json file
-  fileFolder = new Folder(file.fullName.split('.')[0]);
+  var re = /^[a-z0-9-_.]$/gi;
+  fileFolder = file.fullName.substr(0, file.fullName.lastIndexOf('.'));
+  fileFolder = new Folder(fileFolder.split('.')[0]);
   fileFolder.create();
 
   ratio = (ratio || exportRatio(doc, 920, 650));
@@ -63,25 +67,67 @@ function exportDocument(file) {
   // doc
   doc = app.open(file, true);
 
-  exportOriginal(doc, ratio, fileFolder + '/original.png');
+  exportOriginal(doc, ratio, fileFolder + '/original.png', firstDoc);
 
   // bg
-  exportBackground(doc, fileFolder + '/bg.png');
+  exportBackground(doc, fileFolder + '/bg.png', firstDoc);
 
   var infos = {};
   //prefs
   infos.prefs = exportAppPrefs();
   infos.prefs.ratio = ratio;
 
+  // graphics
+  infos.backgrounds = exportGraphics(doc, ratio, fileFolder, firstDoc);
+
+  // graphics
+  infos.graphics = exportGraphics(doc, ratio, fileFolder, firstDoc);
   // text
   infos.texts = exportTexts(doc, ratio);
   // overlay
-  infos.overlay = exportOverlays(doc, ratio, fileFolder);
+  infos.overlay = exportOverlays(doc, ratio, fileFolder, firstDoc);
 
   writeJsonFile(fileFolder.fullName + '/data.json', JSON.stringify(infos));
 }
 
-function exportOverlays(doc, ratio, path) {
+
+function exportBackgrounds(doc, path, firstDoc) {
+  // prefs d'export en 'read only'. Il faut faire un premiere export pour setter les paramètres désirés
+  doc.layers.everyItem().visible = false;
+
+  var first = firstDoc;
+
+  var arr = [];
+  var layer, layerName, fileName, element, rObj, name;
+  var count = doc.layers.count();
+  for (var i = 0; i < count; i++) {
+    layer = doc.layers[i];
+    if(layer.name.indexOf('fond')) {
+      layerName = layer.name;
+      layer.visible = true;
+      doc.save();
+
+      name = 'background' + i;
+
+      element = {
+        id: name,
+        original: {},
+        user: {}
+      };
+
+      fileName = name +'.png';
+      rObj = element.original;
+      rObj.color = layerName.split('/')[1];
+      rObj.src = 'fileName';
+
+      doc.exportFile(ExportFormat.PNG_FORMAT, new File(path + '/' + fileName), first);
+      first = false;
+    }
+  }
+
+}
+
+function exportOverlays(doc, ratio, path, firstDoc) {
   var arr = [];
   doc.layers.everyItem().visible = false;
   var photoLayer = doc.layers.itemByName('_photos');
@@ -99,12 +145,7 @@ function exportOverlays(doc, ratio, path) {
 
       bounds = photoLayer.rectangles[i].geometricBounds;
 
-      rObj.bounds = {
-        x: bounds[1] * ratio,
-        y: bounds[0] * ratio,
-        width: (bounds[3] - bounds[1]) * ratio,
-        height: (bounds[2] - bounds[0]) * ratio
-      };
+      rObj.bounds = getHtmlBounds(bounds, ratio);
       rObj.imageBounds = undefined;
       rObj.verticalScale = undefined;
       rObj.horizontalScale = undefined;
@@ -113,12 +154,7 @@ function exportOverlays(doc, ratio, path) {
       var image = photoLayer.rectangles[i].images[0];
       if (image !== undefined) {
         imageBounds = image.geometricBounds;
-        rObj.imageBounds = {
-          x: imageBounds[1] * ratio,
-          y: imageBounds[0] * ratio,
-          width: (imageBounds[3] - imageBounds[1]) * ratio,
-          height: (imageBounds[2] - imageBounds[0]) * ratio
-        };
+        rObj.imageBounds = getHtmlBounds(imageBounds, ratio);
 
         rObj.verticalScale = image.verticalScale;
         rObj.horizontalScale = image.horizontalScale;
@@ -134,6 +170,7 @@ function exportOverlays(doc, ratio, path) {
     
         $.writeln('file : ', path+'/'+fileName);
         $.writeln('rObj.src : ', rObj.src);
+
       }
 
       //$.writeln('photoLayer file.exists  : ', file.exists);
@@ -143,6 +180,61 @@ function exportOverlays(doc, ratio, path) {
       //$.writeln('photoLayer.rectangles pWeb  : ', pWeb);
 
       arr.push(element);
+    }
+
+  } else {
+    return false;
+  }
+  return arr;
+}
+
+function exportGraphics(doc, ratio, path, firstDoc) {
+  var arr = [];
+  doc.layers.everyItem().visible = false;
+
+  var graphicsLayer = doc.layers.itemByName('_graphics');
+
+  if (graphicsLayer.isValid) {
+    graphicsLayer.visible = true;
+    var rObj, element, group, bounds, htmlBounds, newDoc, name, fileName, fullFileName;
+
+    var firstBloc = firstDoc;
+
+    for (var i = 0; i < graphicsLayer.groups.count(); i++) {
+      name = 'graphic' + i;
+      element = {
+        id: name,
+        original: {},
+        user: {}
+      };
+      rObj = element.original;
+      group = graphicsLayer.groups[i];
+      bounds = group.visibleBounds;
+      htmlBounds = getHtmlBounds(bounds, ratio);
+      rObj.bounds = htmlBounds;
+
+      // start : export du graphic par defaut
+      group.select(SelectionOptions.REPLACE_WITH);
+      app.copy();
+      newDoc = app.documents.add({
+        documentPreferences: {
+          pageWidth: htmlBounds.width,
+          pageHeight: htmlBounds.height,
+          marginPreferences: { bottom: 0, top: 0, left: 0, right: 0 }
+        }
+      });
+      app.paste();
+      fileName = name +'.png';
+      fullFileName = path + '/' + fileName;
+      $.writeln('fullFileName : ', fullFileName);
+      newDoc.exportFile(ExportFormat.PNG_FORMAT, new File(fullFileName), true);
+      newDoc.close(SaveOptions.NO);
+      rObj.src = fileName;
+      // end : export du graphic par defaut
+
+      arr.push(element);
+
+      firstBloc = false;
     }
 
   } else {
@@ -172,12 +264,7 @@ function exportTexts(doc, ratio) {
       rObj.text = escape(txtFrame.contents);
 
       bounds = txtFrame.geometricBounds;
-      rObj.bounds = {
-        x: bounds[1] * ratio,
-        y: (bounds[0] * ratio),
-        width: (bounds[3] - bounds[1]) * ratio,
-        height: (bounds[2] - bounds[0]) * ratio
-      };
+      rObj.bounds = getHtmlBounds(bounds, ratio);
 
       // rObj.bounds = {
       //   x: bounds[1] * ratio,
@@ -226,9 +313,6 @@ function exportTexts(doc, ratio) {
       rObj.horizontalAlign = exportJustification(txtFrame.texts[0].justification);
       rObj.color = hex;
       arr.push(element);
-    
-
-
     }
   } else {
     return false;
@@ -259,16 +343,18 @@ function exportJustification(justif) {
   // Justification.AWAY_FROM_BINDING_SIDE
 }
 
-function exportOriginal(doc, ratio, fullName) {
+function exportOriginal(doc, ratio, fullName, firstDoc) {
   doc.layers.everyItem().visible = true;
   if (!doc.saved) {
     doc.save();
   }
-  alert('Preciser la resolution suivante [ ' + Math.round(ratio * 72) + ' ] dans la fenêtre d\'option d\'export');
-  doc.exportFile(ExportFormat.PNG_FORMAT, new File(fullName), true);
+  if(firstDoc) {
+    alert('Preciser la resolution suivante [ ' + Math.round(ratio * 72) + ' ] dans la fenêtre d\'option d\'export');
+  }
+  doc.exportFile(ExportFormat.PNG_FORMAT, new File(fullName), firstDoc);
 }
 
-function exportBackground(doc, fullName) {
+function exportBackground(doc, fullName, firstDoc) {
   // prefs d'export en 'read only'. Il faut faire un premiere export pour setter les paramètres désirés
   doc.layers.everyItem().visible = false;
   var bgLayer = doc.layers.itemByName('_fond');
@@ -279,7 +365,7 @@ function exportBackground(doc, fullName) {
   if (!doc.saved) {
     doc.save();
   }
-  doc.exportFile(ExportFormat.PNG_FORMAT, new File(fullName), false);
+  doc.exportFile(ExportFormat.PNG_FORMAT, new File(fullName), firstDoc);
 
 }
 
@@ -310,6 +396,15 @@ function writeJsonFile(fullName, dataStr) {
   write_file.lineFeed = "Unix"; //convert to UNIX lineFeed
   write_file.writeln(dataStr);
   write_file.close();
+}
+
+function getHtmlBounds(bounds, ratio) {
+  return {
+        x: bounds[1] * ratio,
+        y: (bounds[0] * ratio),
+        width: (bounds[3] - bounds[1]) * ratio,
+        height: (bounds[2] - bounds[0]) * ratio
+      };
 }
 
 function rgbToHex(r, g, b) {
