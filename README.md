@@ -109,7 +109,6 @@ NB : les elements de bibliotèque seront créé manuellement et fourni sous form
 ## Exemple de fichiers 
 ###Fichiers indesign *aux normes* téléchargeable à cette adresse : [exemple](http://demo.zeeagency.com/2015/032015/artdupapier/exemple-indesign.zip)
 ###Fichiers indesign *aux normes* téléchargeable à cette adresse : [exemple2](ftp://artdupapier.dev2013.zeeagency.com/indesign-exemple2.zip)
-### 
 	
 	
 
