@@ -78,7 +78,7 @@ function exportDocument(file, firstDoc) {
   infos.prefs.ratio = ratio;
 
   // graphics
-  infos.backgrounds = exportGraphics(doc, ratio, fileFolder, firstDoc);
+  infos.backgrounds = exportBackgrounds(doc, fileFolder, firstDoc);
 
   // graphics
   infos.graphics = exportGraphics(doc, ratio, fileFolder, firstDoc);
@@ -88,21 +88,24 @@ function exportDocument(file, firstDoc) {
   infos.overlay = exportOverlays(doc, ratio, fileFolder, firstDoc);
 
   writeJsonFile(fileFolder.fullName + '/data.json', JSON.stringify(infos));
+
 }
 
 
 function exportBackgrounds(doc, path, firstDoc) {
-  // prefs d'export en 'read only'. Il faut faire un premiere export pour setter les paramètres désirés
-  doc.layers.everyItem().visible = false;
 
+  // prefs d'export en 'read only'. Il faut faire un premiere export pour setter les paramètres désirés
+  
   var first = firstDoc;
 
   var arr = [];
   var layer, layerName, fileName, element, rObj, name;
   var count = doc.layers.count();
+
   for (var i = 0; i < count; i++) {
     layer = doc.layers[i];
-    if(layer.name.indexOf('fond')) {
+    doc.layers.everyItem().visible = false;
+    if(layer.name.indexOf('fond') >= 0) {
       layerName = layer.name;
       layer.visible = true;
       doc.save();
@@ -118,12 +121,19 @@ function exportBackgrounds(doc, path, firstDoc) {
       fileName = name +'.png';
       rObj = element.original;
       rObj.color = layerName.split('/')[1];
-      rObj.src = 'fileName';
+      rObj.src = fileName;
+
+      $.writeln('exportBackgrounds rObj.color : ', rObj.color);
 
       doc.exportFile(ExportFormat.PNG_FORMAT, new File(path + '/' + fileName), first);
       first = false;
     }
+
+    arr.push(element);
+
   }
+
+  return arr;
 
 }
 
@@ -213,28 +223,32 @@ function exportGraphics(doc, ratio, path, firstDoc) {
       htmlBounds = getHtmlBounds(bounds, ratio);
       rObj.bounds = htmlBounds;
 
-      // start : export du graphic par defaut
-      group.select(SelectionOptions.REPLACE_WITH);
-      app.copy();
-      newDoc = app.documents.add({
-        documentPreferences: {
-          pageWidth: htmlBounds.width,
-          pageHeight: htmlBounds.height,
-          marginPreferences: { bottom: 0, top: 0, left: 0, right: 0 }
-        }
-      });
-      app.paste();
-      fileName = name +'.png';
-      fullFileName = path + '/' + fileName;
-      $.writeln('fullFileName : ', fullFileName);
-      newDoc.exportFile(ExportFormat.PNG_FORMAT, new File(fullFileName), true);
-      newDoc.close(SaveOptions.NO);
-      rObj.src = fileName;
-      // end : export du graphic par defaut
+      if(group.isValid) {
+        // start : export du graphic par defaut
+        $.writeln('group : ', group);
+        group.select(SelectionOptions.REPLACE_WITH);
+        app.copy();
+        newDoc = app.documents.add({
+          documentPreferences: {
+            pageWidth: htmlBounds.width,
+            pageHeight: htmlBounds.height,
+            marginPreferences: { bottom: 0, top: 0, left: 0, right: 0 }
+          }
+        });
+        app.paste();
+        fileName = name +'.png';
+        fullFileName = path + '/' + fileName;
+        $.writeln('fullFileName : ', fullFileName);
+        newDoc.exportFile(ExportFormat.PNG_FORMAT, new File(fullFileName), true);
+        newDoc.close(SaveOptions.NO);
+        rObj.src = fileName;
+        // end : export du graphic par defaut
 
-      arr.push(element);
+        arr.push(element);
 
-      firstBloc = false;
+        firstBloc = false;
+      }
+     
     }
 
   } else {

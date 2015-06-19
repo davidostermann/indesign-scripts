@@ -36,6 +36,8 @@
 		"alert": true,
 		"escape": true,
 		"prompt": true,
-		"JSON": true
+		"JSON": true,
+		"SelectionOptions": true,
+		"SaveOptions": true
 	}
 }

@@ -43,9 +43,10 @@ NB : Ici le ratio est 1,5. Par exemple, un document de 300px de large sera expor
 ## La structure à appliquer aux documents
 
 
-Le document doit comprendre 3 calques :
+Le document doit comprendre 1 calque pour les photos customisable, 1 calque pour les textes, n calques pour les différentes versions de fonds (1 calques par version):
 
-* pour tous les éléments non-customisable => nom : **_fond**
+* pour tous les versions de fond (éléments non-customisable) => nom : **_fond/#XXXXXX**
+	- NB : Les calques (_fond) doivent être postfixé avec la couleur qui les représente 
 * pour tous les textes customisables => nom : **_textes**
 * pour toutes les photos customisables => nom : **_photos**
 
@@ -54,9 +55,15 @@ Le document doit comprendre 3 calques :
 NB : Tous les autres calques ne seront pas pris en compte.
 
 
-## Les éléments non-customisable
+## Les fonds (éléments non-customisable)
 
-Aucune limitation. Le calque sera aplati et transformé en image. 
+* Chaque calque représente une version du fond. 
+
+* Les calques devront être nommé selon la nomenclature suivante :
+	- _fond/#XXXXXX où #XXXXXX représente la couleur hexadécimal associée.
+	- ex. _fond/#FF0000
+
+* Les calques seront aplatis et transformés en image. 
 	
 ## Les textes customisables
 
@@ -87,8 +94,22 @@ Les contraintes suivantes doivent être suivi pour chaque bloc texte :
 
 ![image](images/image.jpg)
 
+## Les éléments graphiques customisables
+
+#### Seul les groupes sont pris en compte.
+
+#### Les paramètres pris en compte sont la position et la dimension du groupe.
+
+![image](images/group.png)
+
+NB : les elements seront exportés sous forme de png transparent et feront acte d'élément par défaut
+
+NB : les elements de bibliotèque seront créé manuellement et fourni sous forme d'image png transparent.
+
 ## Exemple de fichiers 
 ###Fichiers indesign *aux normes* téléchargeable à cette adresse : [exemple](http://demo.zeeagency.com/2015/032015/artdupapier/exemple-indesign.zip)
+###Fichiers indesign *aux normes* téléchargeable à cette adresse : [exemple2](ftp://artdupapier.dev2013.zeeagency.com/indesign-exemple2.zip)
+### 
 	
 	
 
