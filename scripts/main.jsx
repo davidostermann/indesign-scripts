@@ -57,7 +57,6 @@ function exportDocument(file, firstDoc) {
 
   var fileFolder, dataStr, doc;
   // prepare folder and json file
-  var re = /^[a-z0-9-_.]$/gi;
   fileFolder = file.fullName.substr(0, file.fullName.lastIndexOf('.'));
   fileFolder = new Folder(fileFolder.split('.')[0]);
   fileFolder.create();
@@ -138,6 +137,7 @@ function exportBackgrounds(doc, path, firstDoc) {
 }
 
 function exportOverlays(doc, ratio, path, firstDoc) {
+
   var arr = [];
   doc.layers.everyItem().visible = false;
   var photoLayer = doc.layers.itemByName('_photos');
@@ -199,6 +199,11 @@ function exportOverlays(doc, ratio, path, firstDoc) {
 }
 
 function exportGraphics(doc, ratio, path, firstDoc) {
+
+  var folderName = 'icons';
+  var fileFolder = new Folder(path+'/'+folderName);
+  fileFolder.create();
+
   var arr = [];
   doc.layers.everyItem().visible = false;
 
@@ -206,12 +211,16 @@ function exportGraphics(doc, ratio, path, firstDoc) {
 
   if (graphicsLayer.isValid) {
     graphicsLayer.visible = true;
-    var rObj, element, group, bounds, htmlBounds, newDoc, name, fileName, fullFileName;
+    var rObj, element, group, bounds, htmlBounds, newDoc, name, fileName, fullFileName, layerFolder;
 
     var firstBloc = firstDoc;
 
     for (var i = 0; i < graphicsLayer.groups.count(); i++) {
+
       name = 'graphic' + i;
+      layerFolder = new Folder(path+'/'+folderName+'/'+name);
+      layerFolder.create();
+
       element = {
         id: name,
         original: {},
@@ -236,8 +245,8 @@ function exportGraphics(doc, ratio, path, firstDoc) {
           }
         });
         app.paste();
-        fileName = name +'.png';
-        fullFileName = path + '/' + fileName;
+        fileName = 'default.png';
+        fullFileName = path + '/' + folderName + '/' +  name + '/' + fileName;
         $.writeln('fullFileName : ', fullFileName);
         newDoc.exportFile(ExportFormat.PNG_FORMAT, new File(fullFileName), true);
         newDoc.close(SaveOptions.NO);
