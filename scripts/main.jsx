@@ -250,6 +250,7 @@ function exportGraphics(doc, ratio, path, firstDoc) {
         $.writeln('fullFileName : ', fullFileName);
         newDoc.exportFile(ExportFormat.PNG_FORMAT, new File(fullFileName), true);
         newDoc.close(SaveOptions.NO);
+        rObj.id = name;
         rObj.src = fileName;
         // end : export du graphic par defaut
 
