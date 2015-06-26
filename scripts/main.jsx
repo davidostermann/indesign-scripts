@@ -1,3 +1,4 @@
+    
 #include "libs/json2.js" // jshint ignore:line
 // #include "libs/lodash.js" // jshint ignore:line
 // #include "libs/async.js" // jshint ignore:line
@@ -122,14 +123,12 @@ function exportBackgrounds(doc, path, firstDoc) {
       rObj.color = layerName.split('/')[1];
       rObj.src = fileName;
 
-      $.writeln('exportBackgrounds rObj.color : ', rObj.color);
+      //$.writeln('exportBackgrounds rObj.color : ', rObj.color);
 
       doc.exportFile(ExportFormat.PNG_FORMAT, new File(path + '/' + fileName), first);
       first = false;
+      arr.push(element);
     }
-
-    arr.push(element);
-
   }
 
   return arr;
@@ -178,8 +177,8 @@ function exportOverlays(doc, ratio, path, firstDoc) {
           rObj.src = fileName;
         }
     
-        $.writeln('file : ', path+'/'+fileName);
-        $.writeln('rObj.src : ', rObj.src);
+        //$.writeln('file : ', path+'/'+fileName);
+        //$.writeln('rObj.src : ', rObj.src);
 
       }
 
@@ -234,7 +233,7 @@ function exportGraphics(doc, ratio, path, firstDoc) {
 
       if(group.isValid) {
         // start : export du graphic par defaut
-        $.writeln('group : ', group);
+        //$.writeln('group : ', group);
         group.select(SelectionOptions.REPLACE_WITH);
         app.copy();
         newDoc = app.documents.add({
@@ -247,7 +246,7 @@ function exportGraphics(doc, ratio, path, firstDoc) {
         app.paste();
         fileName = 'default.png';
         fullFileName = path + '/' + folderName + '/' +  name + '/' + fileName;
-        $.writeln('fullFileName : ', fullFileName);
+        //$.writeln('fullFileName : ', fullFileName);
         newDoc.exportFile(ExportFormat.PNG_FORMAT, new File(fullFileName), true);
         newDoc.close(SaveOptions.NO);
         rObj.id = name;
@@ -306,7 +305,8 @@ function exportTexts(doc, ratio) {
       // $.writeln('txtFrame pointSize: ', txtFrame.texts[0].pointSize);
       // $.writeln('txtFrame characterAlignment: ', txtFrame.texts[0].characterAlignment);
       //$.writeln('txtFrame characterAlignment: ', txtFrame.texts[0].justification);
-      // $.writeln('1P txtFrame fillColor: ', txtFrame.texts[0].fillColor.colorValue);
+      $.writeln('1P txtFrame fillColor: ', txtFrame.texts[0].fillColor.colorValue);
+      $.writeln('1P txtFrame color space : ', txtFrame.texts[0].fillColor.space);
       
       var color = txtFrame.texts[0].fillColor;
       var hex = '#000000';
@@ -315,22 +315,50 @@ function exportTexts(doc, ratio) {
       } else {
            if(color.space == ColorSpace.CMYK) {
             hex = cmykToHex.apply(this, color.colorValue);
-            $.writeln('ColorSpace.CMYK : '+ rObj.text+' = '+hex);
+            //$.writeln('ColorSpace.CMYK : '+ rObj.text+' = '+hex);
           } else if(color.space == ColorSpace.RGB) {
             hex = rgbToHex.apply(this, color.colorValue);
-            $.writeln('ColorSpace.RGB : '+ rObj.text+' = '+hex);
+           //$.writeln('ColorSpace.RGB : '+ rObj.text+' = '+hex);
           } else {
             alert("Le colorspace n'est ni en RVB ni en CMYK, le texte sera noir.");
           }
       }
+
+     /** /
+      $.writeln('appliedFont fontFamily : ', txtFrame.texts[0].appliedFont.fontFamily);
+           $.writeln('appliedFont fontStyleName : ', txtFrame.texts[0].appliedFont.fontStyleName);
+           $.writeln('appliedFont fullName : ', txtFrame.texts[0].appliedFont.fullName);
+           $.writeln('appliedFont name : ', txtFrame.texts[0].appliedFont.name);
+           $.writeln('appliedFont platformName : ', txtFrame.texts[0].appliedFont.platformName);
+           $.writeln('appliedFont fontType : ', txtFrame.texts[0].appliedFont.fontType);
+           $.writeln('appliedFont location : ', txtFrame.texts[0].appliedFont.location);
+      /**/
+
+      $.writeln('txtFrame appliedFont.fontStyleName: ', txtFrame.texts[0].appliedFont.fontStyleName);
       
       rObj.fontFamily = txtFrame.texts[0].appliedFont.fontFamily;
+      rObj.fontFile = txtFrame.texts[0].appliedFont.location.split('/').pop();
 
       try {
         rObj.fontStyleName = txtFrame.texts[0].appliedFont.fontStyleName;
       } catch(e) {
         rObj.fontStyleName = "Regular";
       }
+
+      var fw = rObj.fontStyleName.toLowerCase();
+      switch(fw) {
+        case 'normal':
+        case 'bold':
+          break;
+        case 'regular':
+        case 'medium':
+          fw = 'normal';
+          break;
+        default:
+          fw = 'normal';
+          break;
+      }
+      rObj.fontWeight = fw;
       
       rObj.pointSize = txtFrame.texts[0].pointSize * ratio;
       rObj.verticalAlign = exportAlign(txtFrame.texts[0].characterAlignment);
@@ -407,7 +435,7 @@ function exportAppPrefs() {
   obj.xUnitsIsPixel = (app.viewPreferences.horizontalMeasurementUnits == MeasurementUnits.PIXELS);
   obj.yUnitsIsPixel = (app.viewPreferences.verticalMeasurementUnits == MeasurementUnits.PIXELS);
   if (!obj.xUnitsIsPixel || !obj.yUnitsIsPixel) {
-    $.writeln('Fermer tous les documents ouverts dans Indesign et changer les prefs "Units and roulers" pour PIXELS. Ainsi ce seront les prefs par defaut');
+    alert('Fermer tous les documents ouverts dans Indesign et changer les prefs "Units and roulers" pour PIXELS. Ainsi ce seront les prefs par defaut');
   }
   return obj;
 }
@@ -436,6 +464,13 @@ function rgbToHex(r, g, b) {
 }
 
 function cmykToHex(c,m,y,k) {
+  $.writeln('c,m,y,k : ', c, ' / ', m, ' / ', y, ' / ', k );
+
+  c /= 100;
+  m /= 100;
+  y /= 100;
+  k /= 100;
+
   function padZero(str) {
     return "000000".substr(str.length)+str;
   }

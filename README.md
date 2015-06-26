@@ -49,6 +49,7 @@ Le document doit comprendre 1 calque pour les photos customisable, 1 calque pour
 	- NB : Les calques (_fond) doivent être postfixé avec la couleur qui les représente 
 * pour tous les textes customisables => nom : **_textes**
 * pour toutes les photos customisables => nom : **_photos**
+* pour toutes les élément graphiques => nom : **_graphics**
 
 ![image](images/layers.jpg)
 
@@ -96,7 +97,9 @@ Les contraintes suivantes doivent être suivi pour chaque bloc texte :
 
 ## Les éléments graphiques customisables
 
-#### Seul les groupes sont pris en compte.
+#### Seul les groupes sont pris en compte. 
+* Les éléménts doivent être groupé même s'il n'en n'ont pas besoin. 
+* 1 élément customisable = 1 groupe
 
 #### Les paramètres pris en compte sont la position et la dimension du groupe.
 
