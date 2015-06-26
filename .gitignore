@@ -18,8 +18,10 @@ Icon
 *.woff
 *.woff2
 *.svg
-*.indl
+*.idml
+*.html
 *.lst
 *.dfont
 *.eot
-
+*.ttc
+*.css
