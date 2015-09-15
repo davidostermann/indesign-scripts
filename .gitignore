@@ -12,7 +12,6 @@ Icon
 *.jpg
 *.JPG
 *.ai
-*.json
 *.indd
 *.ttf
 *.woff
@@ -25,3 +24,9 @@ Icon
 *.eot
 *.ttc
 *.css
+*.xls*
+*.doc*
+
+data.json
+
+node_modules/*

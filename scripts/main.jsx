@@ -1,7 +1,3 @@
-#include "libs/json2.js" // jshint ignore:line
-// #include "libs/lodash.js" // jshint ignore:line
-// #include "libs/async.js" // jshint ignore:line
-
 Error.prototype.toString = function() {
     if (typeof this.stack === "undefined" || this.stack === null) {
         this.stack = "placeholder";
@@ -16,7 +12,6 @@ var ratio = 1;
 try {
   main();
 } catch (e) {
-
   $.writeln("Line: " + e.line);
   $.writeln("File: " + e.fileName);
   $.writeln("Message: " + e.message);
@@ -45,10 +40,14 @@ function main() {
 
     var filesArr = folder.getFiles('*.indd');
 
+
+    if (filesArr.length === 0) {
+      alert('Il n\'y a aucun fichier indesign dans ce dossier');
+    }
+
     var firstDoc = true;
     for (var i = 0; i < filesArr.length; i++) {
       exportDocument(filesArr[i], firstDoc);
-      firstDoc = false;
     }
   }
 }
@@ -57,16 +56,21 @@ function exportDocument(file, firstDoc) {
 
   var fileFolder, dataStr, doc;
   // prepare folder and json file
-  fileFolder = file.fullName.substr(0, file.fullName.lastIndexOf('.'));
+  fileFolder = file.fsName.substr(0, file.fsName.lastIndexOf('.'));
   fileFolder = new Folder(fileFolder.split('.')[0]);
   fileFolder.create();
 
   ratio = (ratio || exportRatio(doc, 920, 650));
 
   // doc
-  doc = app.open(file, true);
+  try {
+     doc = app.open(file, true);
+  } catch (e) {
+    alert('Une problème empêche le document de s\'ouvrir. '+ e.message);
+  }
 
   exportOriginal(doc, ratio, fileFolder + '/original.png', firstDoc);
+  firstDoc = false;
 
   // bg
   exportBackground(doc, fileFolder + '/bg.png', firstDoc);
@@ -86,7 +90,7 @@ function exportDocument(file, firstDoc) {
   // overlay
   infos.overlay = exportOverlays(doc, ratio, fileFolder, firstDoc);
 
-  writeJsonFile(fileFolder.fullName + '/data.json', JSON.stringify(infos));
+  writeJsonFile(fileFolder.fsName + '/data.json', JSON.stringify(infos));
 
 }
 
@@ -295,7 +299,7 @@ function exportTexts(doc, ratio) {
       // $.writeln('txtFrame appliedFont.fontFamily: ', txtFrame.texts[0].appliedFont.fontFamily);
       // $.writeln('txtFrame appliedFont.fontStyleName: ', txtFrame.texts[0].appliedFont.fontStyleName);
       // $.writeln('txtFrame appliedFont.fontStyleNameNative: ', txtFrame.texts[0].appliedFont.fontStyleNameNative);
-      // $.writeln('txtFrame appliedFont.fullName: ', txtFrame.texts[0].appliedFont.fullName);
+      // $.writeln('txtFrame appliedFont.fsName: ', txtFrame.texts[0].appliedFont.fsName);
       // $.writeln('txtFrame appliedFont.fullNameNative: ', txtFrame.texts[0].appliedFont.fullNameNative);
       // $.writeln('txtFrame pointSize: ', txtFrame.texts[0].pointSize);
       // $.writeln('txtFrame characterAlignment: ', txtFrame.texts[0].characterAlignment);
@@ -322,7 +326,7 @@ function exportTexts(doc, ratio) {
      /** /
       $.writeln('appliedFont fontFamily : ', txtFrame.texts[0].appliedFont.fontFamily);
            $.writeln('appliedFont fontStyleName : ', txtFrame.texts[0].appliedFont.fontStyleName);
-           $.writeln('appliedFont fullName : ', txtFrame.texts[0].appliedFont.fullName);
+           $.writeln('appliedFont fsName : ', txtFrame.texts[0].appliedFont.fsName);
            $.writeln('appliedFont name : ', txtFrame.texts[0].appliedFont.name);
            $.writeln('appliedFont platformName : ', txtFrame.texts[0].appliedFont.platformName);
            $.writeln('appliedFont fontType : ', txtFrame.texts[0].appliedFont.fontType);
