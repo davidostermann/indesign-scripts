@@ -1,4 +1,3 @@
-    
 #include "libs/json2.js" // jshint ignore:line
 // #include "libs/lodash.js" // jshint ignore:line
 // #include "libs/async.js" // jshint ignore:line
@@ -113,15 +112,12 @@ function exportBackgrounds(doc, path, firstDoc) {
       name = 'background' + i;
 
       element = {
-        id: name,
-        original: {},
-        user: {}
+        id: name
       };
 
       fileName = name +'.png';
-      rObj = element.original;
-      rObj.color = layerName.split('/')[1];
-      rObj.src = fileName;
+      element.color = layerName.split('/')[1];
+      element.src = fileName;
 
       //$.writeln('exportBackgrounds rObj.color : ', rObj.color);
 
@@ -229,7 +225,8 @@ function exportGraphics(doc, ratio, path, firstDoc) {
       group = graphicsLayer.groups[i];
       bounds = group.visibleBounds;
       htmlBounds = getHtmlBounds(bounds, ratio);
-      rObj.bounds = htmlBounds;
+      element.bounds = htmlBounds;
+      element.list = [];
 
       if(group.isValid) {
         // start : export du graphic par defaut
@@ -249,12 +246,10 @@ function exportGraphics(doc, ratio, path, firstDoc) {
         //$.writeln('fullFileName : ', fullFileName);
         newDoc.exportFile(ExportFormat.PNG_FORMAT, new File(fullFileName), true);
         newDoc.close(SaveOptions.NO);
-        rObj.id = name;
         rObj.src = fileName;
+        element.list.push(fileName);
         // end : export du graphic par defaut
-
         arr.push(element);
-
         firstBloc = false;
       }
      
