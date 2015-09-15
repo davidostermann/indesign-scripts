@@ -49,6 +49,8 @@ function main() {
     for (var i = 0; i < filesArr.length; i++) {
       exportDocument(filesArr[i], firstDoc);
     }
+
+    alert('L\'export est terminé');
   }
 }
 
