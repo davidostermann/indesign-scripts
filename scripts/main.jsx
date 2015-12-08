@@ -423,11 +423,13 @@ function exportBackground(doc, fullName, firstDoc) {
 }
 
 function exportRatio(doc, destW, destH) {
+/** /
   var origW = doc.pages[0].bounds[3];
   var origH = doc.pages[0].bounds[2];
   var destRatio = destW / destH;
   var origRatio = origW / origH;
   var scaleRatio = (origRatio < destRatio) ? (destH / origH) : (destW / origW);
+/**/
   return 1;
 }
 

@@ -1,0 +1,1 @@
+﻿app.viewPreferences.horizontalMeasurementUnits = MeasurementUnits.MILLIMETERS;app.viewPreferences.verticalMeasurementUnits = MeasurementUnits.MILLIMETERS;// ca ne marche que pour les nouveau document
