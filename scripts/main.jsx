@@ -1,3 +1,5 @@
+#include "libs/json2.js" // jshint ignore:line
+
 Error.prototype.toString = function() {
     if (typeof this.stack === "undefined" || this.stack === null) {
         this.stack = "placeholder";
@@ -290,6 +292,8 @@ function exportTexts(doc, ratio) {
       bounds = txtFrame.geometricBounds;
       rObj.bounds = getHtmlBounds(bounds, ratio);
 
+      rObj.multiline = Boolean(txtFrame.lines.count() > 1);
+
       // rObj.bounds = {
       //   x: bounds[1] * ratio,
       //   y: (bounds[0] * ratio) - (txtFrame.texts[0].ascent * ratio),
@@ -299,7 +303,7 @@ function exportTexts(doc, ratio) {
 
       // $.writeln('txtFrame fontStyle: ', txtFrame.textStyleRanges[0].fontStyle);
       // $.writeln('txtFrame appliedFont.fontFamily: ', txtFrame.texts[0].appliedFont.fontFamily);
-      // $.writeln('txtFrame appliedFont.fontStyleName: ', txtFrame.texts[0].appliedFont.fontStyleName);
+      // $.writeln(': ', txtFrame.texts[0].appliedFont.fontStyleName);
       // $.writeln('txtFrame appliedFont.fontStyleNameNative: ', txtFrame.texts[0].appliedFont.fontStyleNameNative);
       // $.writeln('txtFrame appliedFont.fsName: ', txtFrame.texts[0].appliedFont.fsName);
       // $.writeln('txtFrame appliedFont.fullNameNative: ', txtFrame.texts[0].appliedFont.fullNameNative);

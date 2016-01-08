@@ -76,18 +76,25 @@ NB : Tous les autres calques ne seront pas pris en compte.
 	
 
 #### Les contraintes liées aux textes : 
+
+Tous les blocs de texte doit avoir une baseline "hauteur des capitales". Pour le faire, selectionnez tous les blocs de textes et &#63743;+B. Une modale s'affiche. selectionnez l'onglet ***option de ligne de base***
+puis dans ***premiere ligne de base > decalage***, choisissez ***hauteur des capitales***.
+
+Toutes les typos utilisées doivent être fourni aux formats web : ttf, woff, eot, svg ainsi que le fichier css associé. Pour ce faire, passez par le service [fontie](https://fontie.flowyapps.com/home)
+
 Les contraintes suivantes doivent être suivi pour chaque bloc texte :
 
 * une typo par TextFrame
 * une size par TextFrame
 * une couleur par TextFrame
 * un centrage horizontal par TextFrame
-* la hauteur du TexFrame doit comporter un espace supplémentaire en dessous de la dernière ligne correspondant au 1/2 X la taille de la typo en partant de la ligne de base du texte de la dernière ligne (illustré dans l'image ci-dessous)
+* Option de bloc de texte (selection du bloc de texte => &#63743;+B) > option de ligne de base > premiere ligne de base > decalage : "hauteur des capitales"  
+* ~~la hauteur du TexFrame doit comporter un espace supplémentaire en dessous de la dernière ligne correspondant au 1/2 X la taille de la typo en partant de la ligne de base du texte de la dernière ligne (illustré dans l'image ci-dessous)~~
 
 ![image](images/text_space.jpg)
 	
-* Les typos doivent être des google font. 
-	* La liste exhautive des polices de lettres autorisés est visible ici : et telechargeable en ttf [ici](https://github.com/google/fonts/tree/master/ofl), ici [ici](http://www.fonts.com/web-fonts/google) et visible aussi [ici](http://www.google.com/fonts)
+* ~~Les typos doivent être des google font. ~~
+	* ~~La liste exhautive des polices de lettres autorisés est visible ici : et telechargeable en ttf [ici](https://github.com/google/fonts/tree/master/ofl), ici [ici](http://www.fonts.com/web-fonts/google) et visible aussi [ici](http://www.google.com/fonts)~~
 	
 ## Les photos customisables
 
