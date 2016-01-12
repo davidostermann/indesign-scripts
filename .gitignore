@@ -8,9 +8,11 @@ Icon
 *.idlk
 
 *.zip
-*.png
-*.jpg
-*.JPG
+005*/
+export*/
+file*/
+test*/
+modele*/
 *.ai
 *.indd
 *.ttf
