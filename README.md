@@ -89,12 +89,8 @@ Les contraintes suivantes doivent être suivi pour chaque bloc texte :
 * une couleur par TextFrame
 * un centrage horizontal par TextFrame
 * Option de bloc de texte (selection du bloc de texte => &#63743;+B) > option de ligne de base > premiere ligne de base > decalage : "hauteur des capitales"  
-* ~~la hauteur du TexFrame doit comporter un espace supplémentaire en dessous de la dernière ligne correspondant au 1/2 X la taille de la typo en partant de la ligne de base du texte de la dernière ligne (illustré dans l'image ci-dessous)~~
-
-![image](images/text_space.jpg)
-	
-* ~~Les typos doivent être des google font. ~~
-	* ~~La liste exhautive des polices de lettres autorisés est visible ici : et telechargeable en ttf [ici](https://github.com/google/fonts/tree/master/ofl), ici [ici](http://www.fonts.com/web-fonts/google) et visible aussi [ici](http://www.google.com/fonts)~~
+![image](images/baseline.jpg)
+![image](images/baseline2.jpg)
 	
 ## Les photos customisables
 
