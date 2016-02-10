@@ -80,7 +80,7 @@ NB : Tous les autres calques ne seront pas pris en compte.
 Tous les blocs de texte doit avoir une baseline "hauteur des capitales". Pour le faire, selectionnez tous les blocs de textes et &#63743;+B. Une modale s'affiche. selectionnez l'onglet ***option de ligne de base***
 puis dans ***premiere ligne de base > decalage***, choisissez ***hauteur des capitales***.
 
-Toutes les typos utilisées doivent être fourni aux formats web : ttf, woff, eot, svg ainsi que le fichier css associé. Pour ce faire, passez par le service [fontie](https://fontie.flowyapps.com/home)
+Toutes les typos utilisées dans les fichier indesign doivent être issues d'une generation par le service [fontie](https://fontie.flowyapps.com/home) (génération de ttf, woff, eot, svg ainsi que le fichier css associé à partir du fichier de font original uploadé). Pour ce faire, installer le fichier avec l'extension .ttf sur votre systeme afin de l'utiliser dans le indesign.
 
 Les contraintes suivantes doivent être suivi pour chaque bloc texte :
 
