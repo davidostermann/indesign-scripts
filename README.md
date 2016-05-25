@@ -87,11 +87,20 @@ Les contraintes suivantes doivent être suivi pour chaque bloc texte :
 * une typo par TextFrame
 * une size par TextFrame
 * une couleur par TextFrame
+* Ne pas mettre le texte en capipal 
 * un alignement horizontal par TextFrame
 * Option de bloc de texte (selection du bloc de texte => &#63743;+B) > option de ligne de base > premiere ligne de base > decalage : "hauteur des capitales"  
 ![image](images/baseline.jpg)
 ![image](images/baseline2.jpg)
-	
+* La couleur en RVB
+ 
+![image](images/RVB.png)
+
+* Ne pas mettre le texte en capital 
+
+![image](images/no_capitals.png)
+
+
 ## Les photos customisables
 
 #### Les paramètres pris en compte sont la taille et la position du container et de l'image.
