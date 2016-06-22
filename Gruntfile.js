@@ -11,6 +11,11 @@ module.exports = function(grunt) {
         files: {
           'scripts/adp_export.jsx': ['scripts/main.jsx', 'scripts/libs/json2.js']
         } 
+      },
+      mainCS5: {
+        files: {
+          'scripts/adp_exportCS5.jsx': ['scripts/mainCS5.jsx', 'scripts/libs/json2.js']
+        } 
       }
     },
     concat: {
@@ -18,11 +23,15 @@ module.exports = function(grunt) {
       main: {
         src: ['scripts/libs/json2.js', 'scripts/main.jsx'],
         dest: 'scripts/adp-export.jsx'
+      },
+      mainCS5: {
+        src: ['scripts/libs/json2.js', 'scripts/mainCS5.jsx'],
+        dest: 'scripts/adp-exportCS5.jsx'
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
-  grunt.registerTask('default', ['concat:main']);
+  grunt.registerTask('default', ['concat:main', 'concat:mainCS5']);
 };
